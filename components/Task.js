@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 export default function Task(props){
   const [open, setOpen] = useState(false);
   const router = useRouter();
-
+  const [editBool, setEditBool] = useState(false)
   const [form, setForm] = useState({
     summary: props.project.summary,
     description: props.project.description,
@@ -32,6 +32,10 @@ export default function Task(props){
     setOpen(false);
   };
 
+  const editText = () => {
+    setEditBool()
+  }
+
   function updateForm(value) {
     return setForm((prev) => {
       return { ...prev, ...value };
@@ -46,7 +50,7 @@ export default function Task(props){
         style={{ display: "flex" }}
         onClick={handleOpen}
       >
-        <DeleteMenu />
+        <DeleteMenu/>
         <h3 style={{ margin: "8px" }}>{props.project.summary}</h3>
       </div>
       <Dialog
@@ -56,12 +60,9 @@ export default function Task(props){
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {props.project.summary}
+          Task
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.project.description}
-          </DialogContentText>
 
           <Box component="form" noValidate autoComplete="off">
           <TextField fullWidth margin="normal" inputProps={{ readOnly: true }} id="outlined-Summary" label="Summary" variant="outlined" value={form.summary} onChange={(e) => updateForm({ summary: e.target.value })}/>
