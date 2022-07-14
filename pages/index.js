@@ -11,7 +11,7 @@ export default function Home({ countries }) {
 
   return (
     <div>
-      <h1>Welcome To my todo list</h1>
+      <h1>Welcome</h1>
     </div>
   );
 }
