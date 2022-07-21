@@ -10,8 +10,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Snackbar from "@mui/material/Snackbar";
 import Slide from "@mui/material/Slide";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
-export default function LongMenu() {
+export default function LongMenu({task}) {
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
@@ -20,6 +21,32 @@ export default function LongMenu() {
     open: false,
     Transition: Slide,
   });
+
+  const DELETE_TASK = gql`
+  mutation DeleteTask($deleteTaskId: ID!) {
+    deleteTask(id: $deleteTaskId) {
+      summary
+      description
+    }
+  }`
+
+const PROJECTS = gql`
+query GetProjects($getProjectId: ID!) {
+  getProject(id: $getProjectId) {
+    name
+    tasks {
+      summary
+      description
+      id
+      priority
+      status
+      projectID
+    }
+  }
+}
+`;
+
+  const [deleteMyTask] = useMutation(DELETE_TASK);
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
@@ -30,7 +57,6 @@ export default function LongMenu() {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     setOpen(true);
-    console.log(open);
   };
 
   const handleCloseAlert = (e) => {
@@ -39,7 +65,6 @@ export default function LongMenu() {
     setOpen(false);
     setAnchorEl(null);
     setOpenMenu(false);
-    console.log("12");
   };
 
   const handleClick = (e) => {
@@ -47,15 +72,22 @@ export default function LongMenu() {
     e.nativeEvent.stopImmediatePropagation();
     setAnchorEl(e.currentTarget);
     setOpenMenu(true);
-    console.log("67");
   };
 
-  function SlideTransition(props) {
-    console.log(props)
+  function SlideTransition(props){
     return <Slide {...props} direction="up" />;
   }
 
   const handleClickSnack = (e, Transition) => {
+    deleteMyTask({
+      variables: {
+        deleteTaskId: task.id,
+
+      },
+      refetchQueries: () => [
+        { query: PROJECTS, variables: { getProjectId: task.projectID } }
+      ]
+    })
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     setStateSnack({

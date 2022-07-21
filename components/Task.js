@@ -58,7 +58,7 @@ export default function Task(props){
         style={{ display: "flex" }}
         onClick={handleOpen}
       >
-        <DeleteMenu/>
+        <DeleteMenu task={props.project}/>
         <h3 style={{ margin: "8px" }}>{props.project.summary}</h3>
       </div>
       <Dialog

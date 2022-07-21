@@ -1,5 +1,5 @@
 import styles from "../../styles/Home.module.css";
-import { gql, useMutation,useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import client from "../../apollo-client";
 import { useRouter } from "next/router";
 import Task from "../../components/Task"
@@ -20,6 +20,7 @@ mutation EditTask($projectId: String!, $summary: String!, $description: String!,
   }
 }
 `;
+
 
   const PROJECTS = gql`
 query GetProjects($getProjectId: ID!) {
@@ -46,12 +47,6 @@ query GetProjects($getProjectId: ID!) {
       getProjectId: id,
     },
   });
-  
-  if(loading){
-    console.log("loading")
-  }else{
-    console.log("done")
-  }
 
 
   const editTask = () => {
@@ -74,69 +69,66 @@ query GetProjects($getProjectId: ID!) {
     refreshData();
   }
 
-  if(loading){
-    return(
-      <h1>loading...</h1>
-    )
-  }else{
-  return (
-    <>
-      <h1 style={{ marginLeft: "10%" }} onClick={() => router.push('/project')}>{data.getProject.name}</h1>
-      <div
-        onDragEnter={() => setDragTask("Todo")}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={editTask}
-        style={{ backgroundColor: "#4287f5", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
-        <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>Todo</h1>
-        <div className={styles.grid}>
-          {data.getProject.tasks.filter((task) => task.status === "Todo").map((project) => (
-            <div
-              draggable="true"
-              key={project.id}
-              onDragStart={() => setSelectedTask(project)}
-              style={{ margin: "1rem" }}>
-              <Task project={project} />
-            </div>))}
+  if (loading) return <h1>loading...</h1>
+  else {
+    return (
+      <>
+        <h1 style={{ marginLeft: "10%" }} onClick={() => router.push('/project')}>{data.getProject.name}</h1>
+        <div
+          onDragEnter={() => setDragTask("Todo")}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={editTask}
+          style={{ backgroundColor: "#4287f5", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
+          <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>Todo</h1>
+          <div className={styles.grid}>
+            {data.getProject.tasks.filter((task) => task.status === "Todo" && task.deleted != true).map((project) => (
+              <div
+                draggable="true"
+                key={project.id}
+                onDragStart={() => setSelectedTask(project)}
+                style={{ margin: "1rem" }}>
+                <Task project={project} />
+              </div>))}
+          </div>
         </div>
-      </div>
 
-      <div
-        onDragEnter={() => setDragTask("In Progress")}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={editTask}
-        style={{ backgroundColor: "#bcc232", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
-        <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>In Progress</h1>
-        <div className={styles.grid}>
-          {data.getProject.tasks.filter((task) => task.status === "In Progress").map((project) => (
-            <div draggable="true"
-              key={project.id}
-              onDragStart={() => setSelectedTask(project)}
-              style={{ margin: "1rem" }}>
-              <Task project={project} />
-            </div>
-          ))}
+        <div
+          onDragEnter={() => setDragTask("In Progress")}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={editTask}
+          style={{ backgroundColor: "#bcc232", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
+          <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>In Progress</h1>
+          <div className={styles.grid}>
+            {data.getProject.tasks.filter((task) => task.status === "In Progress" && task.deleted != true).map((project) => (
+              <div draggable="true"
+                key={project.id}
+                onDragStart={() => setSelectedTask(project)}
+                style={{ margin: "1rem" }}>
+                <Task project={project} />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div
-        onDragEnter={() => setDragTask("Done")}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={editTask}
-        style={{ backgroundColor: "#35c467", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
-        <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>Done</h1>
-        <div className={styles.grid}>
-          {data.getProject.tasks.filter((task) => task.status === "Done").map((project) => (
-            <div draggable="true"
-              key={project.id}
-              onDragStart={() => setSelectedTask(project)}
-              style={{ margin: "1rem" }}>
-              <Task project={project} />
-            </div>
-          ))}
+        <div
+          onDragEnter={() => setDragTask("Done")}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={editTask}
+          style={{ backgroundColor: "#35c467", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
+          <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>Done</h1>
+          <div className={styles.grid}>
+            {data.getProject.tasks.filter((task) => task.status === "Done" && task.deleted != true).map((project) => (
+              <div draggable="true"
+                key={project.id}
+                onDragStart={() => setSelectedTask(project)}
+                style={{ margin: "1rem" }}>
+                <Task project={project} />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </>
-  );
-}
+      </>
+    );
+  }
 }
 
 // export async function getServerSideProps(context) {
