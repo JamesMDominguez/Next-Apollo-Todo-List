@@ -25,7 +25,6 @@ export default function Task(props){
   });
 
   const handleOpen = (e) => {
-    console.log(e)
     e.stopPropagation();
     setOpen(true);
   };
@@ -74,9 +73,9 @@ export default function Task(props){
         <DialogContent>
 
           <Box component="form" noValidate autoComplete="off">
-          <TextField fullWidth margin="normal" inputProps={{ readOnly: editBool }} id="outlined-Summary" label="Summary" variant="outlined" value={form.summary} onChange={(e) => updateForm({ summary: e.target.value })}/>
-          <TextField fullWidth margin="normal" inputProps={{ readOnly: editBool }} id="outlined-Description" label="Description" variant="outlined" value={form.description} onChange={(e) => updateForm({ description: e.target.value })} multiline/>
-          <FormControl fullWidth margin="normal" inputProps={{ readOnly: editBool }} >
+          <TextField fullWidth margin="normal" InputProps={{ readOnly: editBool }} id="outlined-Summary" label="Summary" variant="outlined" value={form.summary} onChange={(e) => updateForm({ summary: e.target.value })}/>
+          <TextField fullWidth margin="normal" InputProps={{ readOnly: editBool }} id="outlined-Description" label="Description" variant="outlined" value={form.description} onChange={(e) => updateForm({ description: e.target.value })} multiline/>
+          <FormControl fullWidth margin="normal" InputProps={{ readOnly: editBool }} >
         <InputLabel id="demo-simple-select-label">Priority</InputLabel>
         <Select
           labelId="demo-simple-select-label"
