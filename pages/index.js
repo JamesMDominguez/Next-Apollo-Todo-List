@@ -10,8 +10,8 @@ export default function Home({ countries }) {
   const router = useRouter()
 
   return (
-    <div>
-      <h1>Welcome</h1>
+    <div style={{margin:"5rem"}}>
+      <h1>Welcome To my todo list</h1>
     </div>
   );
 }

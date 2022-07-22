@@ -1,6 +1,5 @@
 import styles from "../../styles/Home.module.css";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import client from "../../apollo-client";
 import { useRouter } from "next/router";
 import Task from "../../components/Task"
 import { useState } from "react";
