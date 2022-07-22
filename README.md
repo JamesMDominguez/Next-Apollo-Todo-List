@@ -14,13 +14,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 # Backend Data Structure
 
-| Project       |      Format     |
+| Project       |      Format    |
 | ------------- | -------------- |
-| user_email    |  email @ mail.com |
+| user.         |  string        |
 | name          |  project_name  |
 | id            |      123###    |
 
-| Task          |      Format     |
+| Task          |      Format    |
 | ------------- | -------------- |
 | summary       |  ...Text |
 | description   |  ...Text |
