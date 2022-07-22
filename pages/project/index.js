@@ -3,12 +3,19 @@ import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 import { useRouter } from 'next/router'
 import ProjectMenu from "../../components/ProjectMenu"
+import Button from '@mui/material/Button';
+import Project from "../../components/Project";
 export default function app({ projects }) {
   const router = useRouter()
 
   return (
     <>
-      <h1 style={{ marginLeft: "20%" }}>Projects</h1>
+      <div style={{ display: "flex", justifyContent: "" }}>
+        <h1 style={{ marginLeft: "11%" }}>Projects</h1>
+        <div style={{ padding: "25px", marginLeft: "25%" }}>
+          <Project/>
+        </div>
+      </div>
       <div style={{ backgroundColor: "#ffb854", margin: "10%", borderRadius: "15px", padding: "40px", marginTop: "2%", marginBottom: "2%" }}>
 
         <div className={styles.grid}>
@@ -22,6 +29,7 @@ export default function app({ projects }) {
           ))}
         </div>
       </div>
+
     </>
   );
 }
