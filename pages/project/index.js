@@ -3,8 +3,7 @@ import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 import { useRouter } from 'next/router'
 import ProjectMenu from "../../components/ProjectMenu"
-import Button from '@mui/material/Button';
-import Project from "../../components/Project";
+import Project from "../../components/CreateProject";
 export default function app({ projects }) {
   const router = useRouter()
 

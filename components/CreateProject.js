@@ -3,8 +3,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 
 export default function Project() {
     const [open, setOpen] = React.useState(false);
@@ -24,18 +25,17 @@ export default function Project() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+          {"New Project"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
+        <Box component="form" noValidate autoComplete="off">
+        <TextField fullWidth margin="normal"  id="outlined-Summary" label="Name" variant="outlined"/>
+        </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose} autoFocus>
-            Agree
+            Save
           </Button>
         </DialogActions>
       </Dialog>

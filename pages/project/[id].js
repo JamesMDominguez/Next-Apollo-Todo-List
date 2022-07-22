@@ -3,6 +3,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import Task from "../../components/Task"
 import { useState } from "react";
+import CreateTask from "../../components/CreateTask"
 
 export default function task() {
   const router = useRouter();
@@ -72,7 +73,12 @@ query GetProjects($getProjectId: ID!) {
   else {
     return (
       <>
-        <h1 style={{ marginLeft: "10%" }} onClick={() => router.push('/project')}>{data.getProject.name}</h1>
+        <div style={{ display: "flex", justifyContent: "" }}>
+          <h1 style={{ marginLeft: "10%" }} onClick={() => router.push('/project')}>{data.getProject.name}</h1>
+          <div style={{ padding: "25px", marginLeft: "25%" }}>
+            <CreateTask />
+          </div>
+        </div>
         <div
           onDragEnter={() => setDragTask("Todo")}
           onDragOver={(e) => e.preventDefault()}
