@@ -1,13 +1,4 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
-import { useRouter } from 'next/router'
-
-
-export default function Home({ countries }) {
-  const router = useRouter()
+export default function Home() {
 
   return (
     <div style={{margin:"5rem"}}>

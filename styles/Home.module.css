@@ -72,6 +72,13 @@
   flex-wrap: wrap;
 }
 
+.grid2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
 .card {
   padding: 1.5rem;
   text-align: left;
@@ -103,6 +110,8 @@
 
 .card2 {
   padding: 1.5rem;
+  padding-top: 0px;
+  padding-left: 0px;
   margin: 10px;
   text-align: left;
   color: inherit;
@@ -121,15 +130,19 @@
   border-color: #ffffff;
 }
 
-.card2 h2 {
+.card2 h3 {
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
+  padding-left: 15px;
+  font-size: 30px;
 }
 
 .card2 p {
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
+  padding-left: 15px;
+
 }
 
 .logo {
