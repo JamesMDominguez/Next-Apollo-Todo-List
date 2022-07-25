@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import Task from "../../components/Task"
 import { useState } from "react";
 import CreateTask from "../../components/CreateTask"
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 export default function task() {
   const router = useRouter();
@@ -38,6 +40,7 @@ query GetProjects($getProjectId: ID!) {
 }
 `;
 
+  const [value, setValue] = useState();
 
   const [editMyTask] = useMutation(EDIT_TASK);
   const { id } = router.query
@@ -71,19 +74,35 @@ query GetProjects($getProjectId: ID!) {
 
   if (loading) return <h1>loading...</h1>
   else {
+    const taskOptions = data.getProject.tasks.map((task, index) => ({
+      id: task.id,
+      label: task.summary
+    }))
     return (
       <>
-        <div style={{ display: "flex", justifyContent: "" }}>
-          <h1 style={{ marginLeft: "10%" }} onClick={() => router.push('/project')}>{data.getProject.name}</h1>
-          <div style={{ padding: "25px", marginLeft: "25%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between",marginRight:"11%",marginLeft:"11%"}}>
+          <h1 onClick={() => router.push('/project')}>{data.getProject.name}</h1>
+          <div style={{ padding: "25px"}}>
             <CreateTask />
           </div>
+          <Autocomplete
+          value={value}
+          onChange={(e, newValue) => {
+            setValue(newValue);
+          }}
+          disablePortal
+          id="combo-box-demo"
+          options={taskOptions}
+          sx={{ width: 200, marginTop: "20px" }}
+          renderInput={(params) => <TextField {...params} label="Projects" />}
+        />
         </div>
+        <div style={{display:"flex", justifyContent: "space-evenly"}}>
         <div
           onDragEnter={() => setDragTask("Todo")}
           onDragOver={(e) => e.preventDefault()}
           onDrop={editTask}
-          style={{ backgroundColor: "#4287f5", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
+          style={{ backgroundColor: "#4287f5", borderRadius: "15px", padding: "10px", width:"28%" }}>
           <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>Todo</h1>
           <div className={styles.grid}>
             {data.getProject.tasks.filter((task) => task.status === "Todo" && task.deleted != true).map((project) => (
@@ -96,12 +115,11 @@ query GetProjects($getProjectId: ID!) {
               </div>))}
           </div>
         </div>
-
         <div
           onDragEnter={() => setDragTask("In Progress")}
           onDragOver={(e) => e.preventDefault()}
           onDrop={editTask}
-          style={{ backgroundColor: "#bcc232", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
+          style={{ backgroundColor: "#bcc232", borderRadius: "15px", padding: "10px",width:"28%" }}>
           <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>In Progress</h1>
           <div className={styles.grid}>
             {data.getProject.tasks.filter((task) => task.status === "In Progress" && task.deleted != true).map((project) => (
@@ -114,11 +132,12 @@ query GetProjects($getProjectId: ID!) {
             ))}
           </div>
         </div>
+
         <div
           onDragEnter={() => setDragTask("Done")}
           onDragOver={(e) => e.preventDefault()}
           onDrop={editTask}
-          style={{ backgroundColor: "#35c467", margin: "10%", borderRadius: "15px", padding: "10px", marginTop: "2%", marginBottom: "2%" }}>
+          style={{ backgroundColor: "#35c467",borderRadius: "15px", padding: "10px", width:"28%" }}>
           <h1 style={{ marginLeft: "5%" }} onClick={() => router.push('/project')}>Done</h1>
           <div className={styles.grid}>
             {data.getProject.tasks.filter((task) => task.status === "Done" && task.deleted != true).map((project) => (
@@ -130,6 +149,8 @@ query GetProjects($getProjectId: ID!) {
               </div>
             ))}
           </div>
+        </div>
+
         </div>
       </>
     );
