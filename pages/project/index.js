@@ -1,5 +1,5 @@
 import styles from "../../styles/Home.module.css";
-import { gql } from "@apollo/client";
+import { gql,useQuery } from "@apollo/client";
 import client from "../../apollo-client";
 import { useRouter } from 'next/router'
 import ProjectMenu from "../../components/ProjectMenu"
@@ -9,14 +9,30 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Login from '../../components/Login'
 import {useState} from 'react'
 
-export default function app({ projects }) {
+export default function app() {
   const router = useRouter()
-  const projectOptions = projects.map((project, index) => ({
+  const [value, setValue] = useState();
+  const PROJECTS = gql`
+  query GetProjects {
+    getProjects {
+      id
+      name
+      user
+      tasks {
+       summary
+     }
+    }
+  }
+  `
+  const { loading, error, data } = useQuery(PROJECTS);
+  if(loading){
+    return <h1>Loading...</h1>
+  }
+  else{
+  const projectOptions = data.getProjects.map((project, index) => ({
     id: project.id,
     label: project.name
   }))
-  const [value, setValue] = useState();
-
   return (
     <>
       <div style={{ display: "flex", justifyContent: "space-between", marginLeft: "11%", marginRight: "11%" }}>
@@ -37,14 +53,15 @@ export default function app({ projects }) {
           renderInput={(params) => <TextField {...params} label="Projects" />}
         />
       </div>
-      <div style={{ backgroundColor: "#ffb854", margin: "10%", borderRadius: "15px", padding: "40px", marginTop: "2%", marginBottom: "2%" }}>
+
+      <div style={{ backgroundColor: "#ffb854", borderRadius: "15px", padding: "40px",marginLeft:"5%" ,marginRight:"5%"}}>
         <div className={styles.grid2}>
-          {projects.map((project) => {
+          {data.getProjects.map((project) => {
             return (
               <div key={project.id} className={styles.card2} onClick={() => router.push(`/project/${project.id}`)}>
                 <div>
                   <ProjectMenu />
-                  <p>Taks:{`${project.tasks.length}`}</p>
+                  <p>{`Taks: ${project.tasks.length}`}</p>
                   <h3>
                     {project.name}
                   </h3>
@@ -54,30 +71,30 @@ export default function app({ projects }) {
           })}
         </div>
       </div>
-
     </>
   );
+ }
 }
 
-export async function getServerSideProps() {
-  const { data } = await client.query({
-    query: gql`
-      query GetProjects {
-        getProjects {
-          id
-          name
-          user
-          tasks {
-           summary
-         }
-        }
-      }
-      `,
-  });
+// export async function getServerSideProps() {
+//   const { data } = await client.query({
+//     query: gql`
+//       query GetProjects {
+//         getProjects {
+//           id
+//           name
+//           user
+//           tasks {
+//            summary
+//          }
+//         }
+//       }
+//       `,
+//   });
 
-  return {
-    props: {
-      projects: data.getProjects,
-    },
-  };
-}
+//   return {
+//     props: {
+//       projects: data.getProjects,
+//     },
+//   };
+// }

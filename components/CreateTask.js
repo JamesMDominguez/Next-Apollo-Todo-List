@@ -6,14 +6,57 @@ import { useState } from "react"
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-
+import { useRouter } from "next/router";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import { gql, useMutation } from "@apollo/client";
 
 
 export default function Task() {
+  const router = useRouter();
+  const { id } = router.query
+
+  const CREATE_TASK = gql`
+    mutation CreateTask($projectId: String!, $summary: String!, $description: String!, $priority: String!, $status: String!, $deleted: Boolean!) {
+  createTask(projectID: $projectId, summary: $summary, description: $description, priority: $priority, status: $status, deleted: $deleted) {
+    summary
+    description
+  }
+}`
+
+    const PROJECTS = gql`
+  query GetProjects($getProjectId: ID!) {
+    getProject(id: $getProjectId) {
+      name
+      tasks {
+        summary
+        description
+        id
+        priority
+        status
+        projectID
+      }
+    }
+  }
+  `;
+
+    const [form, setForm] = useState({
+        summary: "",
+        description: "",
+        priority: "",
+        status: "",
+    });
+
+    function updateForm(value){
+        return setForm((prev) => {
+            return { ...prev, ...value };
+        });
+    }
+
+    const [createTask] = useMutation(CREATE_TASK);
+
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => setOpen(true)
@@ -34,16 +77,17 @@ export default function Task() {
                     Task
                 </DialogTitle>
                 <DialogContent>
-
                     <Box component="form" noValidate autoComplete="off">
-                        <TextField fullWidth margin="normal"  id="outlined-Summary" label="Summary" variant="outlined"/>
-                        <TextField fullWidth margin="normal"  id="outlined-Description" label="Description" variant="outlined" multiline />
+                        <TextField fullWidth margin="normal" id="outlined-Summary" label="Summary" variant="outlined" value={form.summary} onChange={(e) => updateForm({ summary: e.target.value })} />
+                        <TextField fullWidth margin="normal" id="outlined-Description" label="Description" variant="outlined" multiline value={form.description} onChange={(e) => updateForm({ description: e.target.value })} />
                         <FormControl fullWidth margin="normal">
                             <InputLabel id="demo-simple-select-label">Priority</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Priority"
+                                value={form.priority}
+                                onChange={(e) => updateForm({ priority: e.target.value })}
                             >
                                 <MenuItem value="Lowest">Lowest</MenuItem>
                                 <MenuItem value="Low">Low</MenuItem>
@@ -59,9 +103,11 @@ export default function Task() {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Status"
+                                value={form.status}
+                                onChange={(e) => updateForm({ status: e.target.value })}
                             >
                                 <MenuItem value="In Progress">In Progress</MenuItem>
-                                <MenuItem value="Todo">Low</MenuItem>
+                                <MenuItem value="Todo">Todo</MenuItem>
                                 <MenuItem value="Done">Medium</MenuItem>
                             </Select>
                         </FormControl>
@@ -70,7 +116,22 @@ export default function Task() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose} autoFocus>
+                    <Button onClick={() => {
+                        handleClose()
+                        createTask({
+                            variables: {
+                                projectId: id,
+                                summary: form.summary,
+                                description: form.description,
+                                priority: form.priority,
+                                status: form.status,
+                                deleted: false,
+                            },
+                            refetchQueries: () => [
+                                { query: PROJECTS, variables: { getProjectId: id } }
+                            ]
+                        })
+                    }} autoFocus>
                         Save
                     </Button>
                 </DialogActions>
