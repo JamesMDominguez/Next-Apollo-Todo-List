@@ -6,7 +6,7 @@ import { useState } from "react";
 import CreateTask from "../../components/CreateTask"
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Loading from "../../components/loading";
+import Loading from "../../components/Loading";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function task() {

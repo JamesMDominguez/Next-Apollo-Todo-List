@@ -1,14 +1,12 @@
 import styles from "../../styles/Home.module.css";
 import { gql,useQuery } from "@apollo/client";
-import client from "../../apollo-client";
 import { useRouter } from 'next/router'
 import ProjectMenu from "../../components/ProjectMenu"
 import Project from "../../components/CreateProject";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import Login from '../../components/Login'
 import {useState} from 'react'
-import Loading from "../../components/loading";
+import Loading from "../../components/Loading";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function app() {
