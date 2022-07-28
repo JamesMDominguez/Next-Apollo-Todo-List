@@ -6,6 +6,8 @@ import { useState } from "react";
 import CreateTask from "../../components/CreateTask"
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Loading from "../../components/loading";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function task() {
   const router = useRouter();
@@ -38,7 +40,7 @@ query GetProjects($getProjectId: ID!) {
 `;
 
   const [value, setValue] = useState();
-
+  const matches = useMediaQuery('(min-width:640px)');
   const [editMyTask] = useMutation(EDIT_TASK);
   const { id } = router.query
 
@@ -68,7 +70,13 @@ query GetProjects($getProjectId: ID!) {
     })
   }
 
-  if (loading) return <h1>loading...</h1>
+  if (loading) {
+    return(
+      <div style={{display:"flex",justifyContent:"center"}}>
+      <Loading/>
+      </div>
+    )
+  }
   else {
     const taskOptions = data.getProject.tasks.map((task, index) => ({
       id: task.id,
@@ -76,11 +84,12 @@ query GetProjects($getProjectId: ID!) {
     }))
     return (
       <>
-        <div style={{ display: "flex", justifyContent: "space-between", marginRight: "11%", marginLeft: "11%" }}>
-          <h1 onClick={() => router.push('/project')}>{data.getProject.name}</h1>
-          <div style={{ padding: "25px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between",marginLeft:"5%" ,marginRight:"5%",flexWrap:"wrap",marginBottom:"5%"}}>
+          <h1 onClick={() => router.push('/project')} style={{marginTop:"25px" }}>{data.getProject.name}</h1>
+          <div style={{ paddingTop: "25px" }}>
             <CreateTask />
           </div>
+        <div style={{margin:matches?"0":"auto"}}>
           <Autocomplete
             value={value}
             onChange={(e, newValue) => {
@@ -89,9 +98,11 @@ query GetProjects($getProjectId: ID!) {
             disablePortal
             id="combo-box-demo"
             options={taskOptions}
-            sx={{ width: 200, marginTop: "20px" }}
+            sx={{ width: 300, marginTop: "20px",marginBottom:"20px",marginLeft:"15px" }}
             renderInput={(params) => <TextField {...params} label="Projects" />}
           />
+        </div>
+
         </div>
         <div className={styles.flexContainer}>        
           <div

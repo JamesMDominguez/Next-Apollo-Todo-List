@@ -8,6 +8,8 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Login from '../../components/Login'
 import {useState} from 'react'
+import Loading from "../../components/loading";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function app() {
   const router = useRouter()
@@ -25,8 +27,20 @@ export default function app() {
   }
   `
   const { loading, error, data } = useQuery(PROJECTS);
-  if(loading){
-    return <h1>Loading...</h1>
+  const matches = useMediaQuery('(min-width:600px)');
+  const objToday = new Date(),
+	months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+	curMonth = months[objToday.getMonth()],
+	curYear = objToday.getFullYear()
+
+  const today = curMonth + ", " + curYear;
+
+  if (loading) {
+    return(
+      <div style={{display:"flex",justifyContent:"center"}}>
+      <Loading/>
+      </div>
+    )
   }
   else{
   const projectOptions = data.getProjects.map((project, index) => ({
@@ -35,11 +49,12 @@ export default function app() {
   }))
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", marginLeft: "11%", marginRight: "11%" }}>
-        <h1>Projects</h1>
-        <div style={{ padding: "25px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between",marginLeft:"5%" ,marginRight:"5%",flexWrap:"wrap",marginBottom:"5%"}}>
+        <h1 style={{marginTop:"20px" }}>Kanban</h1>
+        <div style={{ paddingTop: "25px" }}>
           <Project />
         </div>
+        <div style={{margin:matches?"0":"auto"}}>
         <Autocomplete
           value={value}
           onChange={(e, newValue) => {
@@ -49,18 +64,23 @@ export default function app() {
           disablePortal
           id="combo-box-demo"
           options={projectOptions}
-          sx={{ width: 200, marginTop: "20px" }}
+          sx={{ width: 300, marginTop: "20px",marginBottom:"20px"}}
           renderInput={(params) => <TextField {...params} label="Projects" />}
-        />
+          />
+          </div>
       </div>
 
-      <div style={{ backgroundColor: "#ffb854", borderRadius: "15px", padding: "40px",marginLeft:"5%" ,marginRight:"5%"}}>
+      <div style={{ backgroundColor: "#ffb854", borderRadius: "15px", padding: "40px",paddingTop:"10px",marginLeft:"5%" ,marginRight:"5%"}}>
+        <div style={{display:"flex",justifyContent:"space-between"}}>
+        <h2>{`${data.getProjects.length} Projects`}</h2>
+        <h2>{today}</h2>
+        </div>
         <div className={styles.grid2}>
           {data.getProjects.map((project) => {
             return (
               <div key={project.id} className={styles.card2} onClick={() => router.push(`/project/${project.id}`)}>
                 <div>
-                  <ProjectMenu />
+                  <ProjectMenu project={project}/>
                   <p>{`Taks: ${project.tasks.length}`}</p>
                   <h3>
                     {project.name}

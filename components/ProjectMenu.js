@@ -10,8 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Snackbar from "@mui/material/Snackbar";
 import Slide from "@mui/material/Slide";
-
-export default function ProjectMenu() {
+import EditProject from "./Project";
+export default function ProjectMenu({project}) {
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
@@ -98,10 +98,10 @@ export default function ProjectMenu() {
             width: "20ch",
           },
         }}
-      >
-        <MenuItem onClick={handleClickOpen}>
-          <div variant="outlined">Edit</div>
-        </MenuItem>
+      > 
+      <div onClick={(e)=>{e.preventDefault(); e.stopPropagation()}}>
+        <EditProject/>
+      </div>
         <MenuItem onClick={handleClickOpen}>
           <div variant="outlined">Delete</div>
         </MenuItem>
