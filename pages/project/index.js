@@ -6,7 +6,6 @@ import Project from "../../components/CreateProject";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {useState} from 'react'
-import Loading from "../../components/Loading";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function app() {
@@ -36,7 +35,7 @@ export default function app() {
   if (loading) {
     return(
       <div style={{display:"flex",justifyContent:"center"}}>
-      <Loading/>
+      Loading....
       </div>
     )
   }
