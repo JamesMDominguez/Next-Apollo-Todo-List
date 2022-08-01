@@ -8,21 +8,47 @@ import {useState} from "react"
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-
+import { gql, useMutation } from "@apollo/client";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
-export default function Task(props){
+export default function Task({project}){
   const [open, setOpen] = useState(false);
   const [editBool, setEditBool] = useState(true)
   const [form, setForm] = useState({
-    summary: props.project.summary,
-    description: props.project.description,
-    priority: props.project.priority,
-    status: props.project.status,
+    summary: project.summary,
+    description: project.description,
+    priority: project.priority,
+    status: project.status,
   });
+
+  const EDIT_TASK = gql`
+  mutation EditTask($projectId: String!, $summary: String!, $description: String!, $priority: String!, $status: String!, $editTaskId: ID!, $deleted: Boolean!) {
+    editTask(projectID: $projectId, summary: $summary, description: $description, priority: $priority, status: $status, id: $editTaskId, deleted: $deleted) {
+      description
+      summary
+    }
+  }`
+
+const PROJECTS = gql`
+query GetProjects($getProjectId: ID!) {
+  getProject(id: $getProjectId) {
+    name
+    tasks {
+      summary
+      description
+      id
+      priority
+      status
+      projectID
+    }
+  }
+}
+`;
+
+  const [editTask] = useMutation(EDIT_TASK)
 
   const handleOpen = (e) => {
     e.stopPropagation();
@@ -36,12 +62,27 @@ export default function Task(props){
   const editText = () => {
     setEditBool(false)
   }
-
   const editSaveBTN = () => {
       if(editBool){
           return <Button onClick={editText} variant="outlined">Edit</Button>
     }
-    return <Button onClick={handleClose} variant="outlined">Save</Button>
+    return <Button onClick={()=>{
+      editTask({
+        variables: {
+          projectId: project.projectID,
+          summary: form.summary,
+          description: form.description,
+          priority: form.priority,
+          status: form.status,
+          editTaskId: project.id,
+          deleted: false
+        },
+        refetchQueries: () => [
+          { query: PROJECTS, variables: { getProjectId: project.projectID } }
+      ]    
+    })
+      handleClose()
+    }} variant="outlined">Save</Button>
   }
 
   function updateForm(value) {
@@ -53,13 +94,13 @@ export default function Task(props){
   return (
     <>
       <div
-        key={props.project.id}
+        key={project.id}
         className={styles.card}
         style={{ display: "flex" }}
         onClick={handleOpen}
       >
-        <DeleteMenu task={props.project}/>
-        <h3 style={{ margin: "8px" }}>{props.project.summary}</h3>
+        <DeleteMenu task={project}/>
+        <h3 style={{ margin: "8px" }}>{project.summary}</h3>
       </div>
       <Dialog
         open={open}
