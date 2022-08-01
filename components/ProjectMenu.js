@@ -21,9 +21,6 @@ export default function ProjectMenu({project}) {
     Transition: Slide,
   });
 
-
-
-
   const handleCloseMenu = (e) => {
     e.stopPropagation()
     setAnchorEl(null);
@@ -100,7 +97,7 @@ export default function ProjectMenu({project}) {
         }}
       > 
       <div onClick={(e)=>{e.preventDefault(); e.stopPropagation()}}>
-        <EditProject/>
+        <EditProject project={project}/>
       </div>
         <MenuItem onClick={handleClickOpen}>
           <div variant="outlined">Delete</div>

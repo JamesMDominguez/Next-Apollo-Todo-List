@@ -52,8 +52,6 @@ query GetProjects($getProjectId: ID!) {
 
 
   const editTask = () => {
-    console.log("droped")
-    console.log(selectedTask)
     editMyTask({
       variables: {
         projectId: selectedTask.projectID,
