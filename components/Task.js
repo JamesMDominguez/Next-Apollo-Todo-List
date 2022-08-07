@@ -4,7 +4,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "../styles/Home.module.css";
 import DeleteMenu from "./DeleteMenu";
-import {useState} from "react"
+import { useState } from "react"
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,7 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
-export default function Task({project}){
+export default function Task({ project }) {
   const [open, setOpen] = useState(false);
   const [editBool, setEditBool] = useState(true)
   const [form, setForm] = useState({
@@ -32,7 +32,7 @@ export default function Task({project}){
     }
   }`
 
-const PROJECTS = gql`
+  const PROJECTS = gql`
 query GetProjects($getProjectId: ID!) {
   getProject(id: $getProjectId) {
     name
@@ -63,10 +63,10 @@ query GetProjects($getProjectId: ID!) {
     setEditBool(false)
   }
   const editSaveBTN = () => {
-      if(editBool){
-          return <Button onClick={editText} variant="outlined">Edit</Button>
+    if (editBool) {
+      return <Button onClick={editText} variant="outlined">Edit</Button>
     }
-    return <Button onClick={()=>{
+    return <Button onClick={() => {
       editTask({
         variables: {
           projectId: project.projectID,
@@ -79,8 +79,8 @@ query GetProjects($getProjectId: ID!) {
         },
         refetchQueries: () => [
           { query: PROJECTS, variables: { getProjectId: project.projectID } }
-      ]    
-    })
+        ]
+      })
       handleClose()
     }} variant="outlined">Save</Button>
   }
@@ -99,7 +99,7 @@ query GetProjects($getProjectId: ID!) {
         style={{ display: "flex" }}
         onClick={handleOpen}
       >
-        <DeleteMenu task={project}/>
+        <DeleteMenu task={project} />
         <h3 style={{ margin: "8px" }}>{project.summary}</h3>
       </div>
       <Dialog
@@ -114,41 +114,41 @@ query GetProjects($getProjectId: ID!) {
         <DialogContent>
 
           <Box component="form" noValidate autoComplete="off">
-          <TextField fullWidth margin="normal" InputProps={{ readOnly: editBool }} id="outlined-Summary" label="Summary" variant="outlined" value={form.summary} onChange={(e) => updateForm({ summary: e.target.value })}/>
-          <TextField fullWidth margin="normal" InputProps={{ readOnly: editBool }} id="outlined-Description" label="Description" variant="outlined" value={form.description} onChange={(e) => updateForm({ description: e.target.value })} multiline/>
-          <FormControl fullWidth margin="normal" InputProps={{ readOnly: editBool }} >
-        <InputLabel id="demo-simple-select-label">Priority</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={form.priority}
-          label="Priority"
-          onChange={(e) => updateForm({ priority: e.target.value })}
-          inputProps={{ readOnly: editBool }}
-        >
-          <MenuItem value="Lowest">Lowest</MenuItem>
-          <MenuItem value="Low">Low</MenuItem>
-          <MenuItem value="Medium">Medium</MenuItem>
-          <MenuItem value="High">High</MenuItem>
-          <MenuItem value="Highest">Highest</MenuItem>
-        </Select>
-      </FormControl> 
+            <TextField fullWidth margin="normal" InputProps={{ readOnly: editBool }} id="outlined-Summary" label="Summary" variant="outlined" value={form.summary} onChange={(e) => updateForm({ summary: e.target.value })} />
+            <TextField fullWidth margin="normal" InputProps={{ readOnly: editBool }} id="outlined-Description" label="Description" variant="outlined" value={form.description} onChange={(e) => updateForm({ description: e.target.value })} multiline />
+            <FormControl fullWidth margin="normal" InputProps={{ readOnly: editBool }} >
+              <InputLabel id="demo-simple-select-label">Priority</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={form.priority}
+                label="Priority"
+                onChange={(e) => updateForm({ priority: e.target.value })}
+                inputProps={{ readOnly: editBool }}
+              >
+                <MenuItem value="Lowest">Lowest</MenuItem>
+                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Medium">Medium</MenuItem>
+                <MenuItem value="High">High</MenuItem>
+                <MenuItem value="Highest">Highest</MenuItem>
+              </Select>
+            </FormControl>
 
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="demo-simple-select-label">Status</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={form.status}
-          label="Status"
-          onChange={(e) => updateForm({ status: e.target.value })}
-          inputProps={{ readOnly: editBool }}
-        >
-          <MenuItem value="In Progress">In Progress</MenuItem>
-          <MenuItem value="Todo">Low</MenuItem>
-          <MenuItem value="Done">Medium</MenuItem>
-        </Select>
-      </FormControl> 
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="demo-simple-select-label">Status</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={form.status}
+                label="Status"
+                onChange={(e) => updateForm({ status: e.target.value })}
+                inputProps={{ readOnly: editBool }}
+              >
+                <MenuItem value="In Progress">In Progress</MenuItem>
+                <MenuItem value="Todo">Low</MenuItem>
+                <MenuItem value="Done">Medium</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
 
         </DialogContent>
