@@ -14,18 +14,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 # Backend Data Structure
 
-| Project       |      Format    |
-| ------------- | -------------- |
-| user.         |  string        |
-| name          |  project_name  |
-| id            |      123###    |
-
-| Task          |      Format    |
-| ------------- | -------------- |
-| summary       |  ...Text |
-| description   |  ...Text |
-| priority      |  Lowest, Low, Medium, High, Highest |
-| status        | Todo, In Progress, Done |
-| project_id    |  123###   |
-| id            |  123###   |
-
+<img width="653" alt="Screen Shot 2022-08-20 at 1 14 24 PM" src="https://user-images.githubusercontent.com/69368392/185766410-86618ebb-05ce-4763-8191-403cf0383e49.png">
